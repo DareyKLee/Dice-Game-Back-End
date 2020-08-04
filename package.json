@@ -2,7 +2,7 @@
   "name": "dice-game",
   "version": "1.0.0",
   "engines": {
-    "node": "14.2.0"  
+    "node": "14.2.0"
   },
   "description": "Dice Game NodeJS Backend",
   "main": "app.js",
