@@ -4,9 +4,8 @@ const app = express();
 const Game = require('./game/game');
 
 const port = process.env.PORT || 8081;
-// const port = 8081;
 const server = app.listen(port, () => {
-    console.log('SERVER RUNNING');
+    console.log(`SERVER RUNNING ${port}`);
 });
 
 let io = socket(server);
