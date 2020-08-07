@@ -18,10 +18,24 @@ io.on('connection', (socket) => {
         createGameSessionFlag = !createGameSessionFlag;
         player1Socket = socket;
 
+        console.log('PLAYER 1 CONNECTED');
+        
+        player1Socket.on('disconnect', function() {
+            createGameSessionFlag = !createGameSessionFlag;
+            
+            console.log('PLAYER 1 DISCONNECTED');
+        });
+
     } else {
         createGameSessionFlag = !createGameSessionFlag;
         player2Socket = socket;
         
+        player1Socket.removeAllListeners('disconnect');
+
+        console.log('PLAYER 2 CONNECTED');
+
         new Game(player1Socket, player2Socket);
+
+        console.log('GAME CREATED');
     }
 });

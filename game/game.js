@@ -10,13 +10,13 @@ class Game {
         this.player1Socket = player1Socket;
         this.player2Socket = player2Socket;
 
-        this.setSocketFunctions(this.player1Socket);
-        this.setSocketFunctions(this.player2Socket);
+        this.setSocketFunctions(this.player1Socket, this.player2Socket);
+        this.setSocketFunctions(this.player2Socket, this.player1Socket);
 
         this.sendGameStateToSockets();
     }
 
-    setSocketFunctions(playerSocket) {
+    setSocketFunctions(playerSocket, opponentSocket) {
         playerSocket.on('message', (message) => {
             switch(message) {
                 case 'ROLL':
@@ -26,6 +26,11 @@ class Game {
                     this.fold();
                     break;
             }
+        });
+
+        playerSocket.on('disconnect', function() {
+            opponentSocket.send('OPPONENT DISCONNECTED');
+            opponentSocket.disconnect();
         })
     }
 
@@ -55,12 +60,8 @@ class Game {
     fold() {
         if (this.activePlayer === 1) {
             this.sendRoundMessages(this.player2Socket, this.player1Socket);
-            // this.player1Socket.send('LOST ROUND');
-            // this.player2Socket.send('WON ROUND');
         } else {
             this.sendRoundMessages(this.player1Socket, this.player2Socket);
-            // this.player1Socket.send('WON ROUND');
-            // this.player2Socket.send('LOST ROUND');
         }
 
         this.payOut();
@@ -132,12 +133,8 @@ class Game {
 
             if (this.activePlayer === 1) {
                 this.sendRoundMessages(this.player2Socket, this.player1Socket);
-                // this.player1Socket.send('LOST ROUND');
-                // this.player2Socket.send('WON ROUND');
             } else {
                 this.sendRoundMessages(this.player1Socket, this.player2Socket);
-                // this.player1Socket.send('WON ROUND');
-                // this.player2Socket.send('LOST ROUND');
             }
 
             this.payOut();
