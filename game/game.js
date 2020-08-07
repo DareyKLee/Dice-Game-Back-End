@@ -40,6 +40,9 @@ class Game {
     }
 
     disconnectSockets() {
+        this.player1Socket.removeAllListeners('disconnect');
+        this.player2Socket.removeAllListeners('disconnect');
+        
         this.player1Socket.disconnect();
         this.player2Socket.disconnect();
     }
